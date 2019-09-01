@@ -16,27 +16,24 @@
     <el-container>
       <el-aside width="200px">
         <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
           unique-opened
+          router
         >
           <el-submenu index="1">
-            <template slot="title">
+            <template v-slot:title>
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="user">
+            <el-menu-item index="users">
               <i class="el-icon-menu"></i>
               <span slot="title">用户列表</span>
             </el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title">
+            <template v-slot:title>
               <i class="el-icon-location"></i>
               <span>权限管理</span>
             </template>
@@ -51,18 +48,16 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
 
-    }
-  },
   methods: {
     logout () {
       this.$confirm('亲，你确定要退出系统吗?', '温馨提示', {
@@ -73,24 +68,18 @@ export default {
         this.$message.success('退出成功')
         localStorage.removeItem('token')
         this.$router.push('/login')
-      }).catch(() => {
-        this.$message.info('退出取消')
+      }).catch((e) => {
+        // this.$message.info('退出取消')
         // ({
         //   type: 'info',
         //   message: '已取消退出'
         // })
+        console.log(e)
       })
-    },
-    //  左侧
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
     }
   }
-
 }
+
 </script>
 
 <style lang='scss' scoped>
@@ -100,7 +89,7 @@ export default {
     background-color: #d8d8d8;
     display: flex;
     .logo {
-      flex: 1;
+      // flex: 1;
       width: 180px;
       img {
         height: 40px;
@@ -128,15 +117,17 @@ export default {
   .el-aside {
     background-color: #545c64;
     color: #333;
-
     line-height: 200px;
+    .el-menu {
+      border: none;
+    }
   }
 
   .el-main {
     background-color: #ecf0f1;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    // text-align: center;
+    // line-height: 160px;
   }
 }
 </style>
