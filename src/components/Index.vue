@@ -12,7 +12,17 @@
         <a href="javascript:;" @click="logout" type="text">退出</a>
       </div>
     </el-header>
+    <!--
+        el-menu 整个大的菜单组件
+          default-active="2-1" 配置哪个菜单项, 默认被选中
+          unique-opened 配置是否只有一个子菜单展开
 
+        el-submenu 子菜单
+          <template v-slot:title> 配置的是子菜单的标题
+
+          el-menu-item 配置的是展开的菜单项
+          index 标记菜单项的
+    -->
     <el-container>
       <el-aside width="200px">
         <el-menu
@@ -21,29 +31,16 @@
           active-text-color="#ffd04b"
           unique-opened
           router
+          :default-active="defaultActive"
         >
-          <el-submenu index="1">
+          <el-submenu :index="menu.path" v-for="menu in menuList" :key="menu.id">
             <template v-slot:title>
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{menu.authName}}</span>
             </template>
-            <el-menu-item index="users">
+            <el-menu-item :index="item.path" v-for="item in menu.children" :key="item.id">
               <i class="el-icon-menu"></i>
-              <span slot="title">用户列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template v-slot:title>
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="roles">
-              <i class="el-icon-menu"></i>
-              <span slot="title">角色列表</span>
-            </el-menu-item>
-            <el-menu-item index="rights">
-              <i class="el-icon-menu"></i>
-              <span slot="title">列表权限</span>
+              <span slot="title">{{item.authName}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -57,7 +54,21 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      menuList: []
+    }
+  },
+  async created () {
+    const { meta, data } = await this.$axios.get('menus')
+    if (meta.status === 200) {
+      this.$message.success(meta.msg)
+      this.menuList = data
+      console.log(data)
+    } else {
+      this.$message.error(meta.msg)
+    }
+  },
   methods: {
     logout () {
       this.$confirm('亲，你确定要退出系统吗?', '温馨提示', {
@@ -76,6 +87,14 @@ export default {
         // })
         console.log(e)
       })
+    }
+  },
+  // 计算属性
+  computed: {
+    defaultActive () {
+      // $router 路由规则
+      // $route当前路由信息
+      return this.$route.path.slice(1)
     }
   }
 }
