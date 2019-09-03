@@ -64,7 +64,7 @@ export default {
     if (meta.status === 200) {
       this.$message.success(meta.msg)
       this.menuList = data
-      console.log(data)
+      // console.log(data)
     } else {
       this.$message.error(meta.msg)
     }
@@ -94,7 +94,7 @@ export default {
     defaultActive () {
       // $router 路由规则
       // $route当前路由信息
-      return this.$route.path.slice(1)
+      return this.$route.path.slice(1).split('-')[0]
     }
   }
 }

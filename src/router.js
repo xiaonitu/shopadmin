@@ -49,14 +49,17 @@ const router = new Router({
       },
       {
         path: '/categories',
+        name: 'categories',
         component: Categories
       },
       {
         path: '/goods',
+        name: 'goods',
         component: Goods
       },
       {
-        path: '/goodsadd',
+        path: '/goods-add',
+        name: 'goods-add',
         component: GoodsAdd
       }
     ]
